@@ -6,7 +6,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "./ui/dialog";
 
 interface ModalProps {
@@ -25,14 +24,13 @@ const Modal = ({
   children,
 }: ModalProps) => {
   const onChange = (open: boolean) => {
-    if (open) {
+    if (!open) {
       onClose();
     }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onChange}>
-      <DialogTrigger></DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
