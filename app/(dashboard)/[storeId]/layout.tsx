@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 import db from "@/lib/db";
+import Navbar from "@/components/Navbar";
 
 type Props = {
   children: React.ReactNode;
@@ -31,7 +32,7 @@ const DashboardLayout = async ({ children, params }: Props) => {
 
   return (
     <>
-      Navbar
+      <Navbar />
       {children}
     </>
   );
