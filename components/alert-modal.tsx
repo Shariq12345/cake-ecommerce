@@ -21,7 +21,7 @@ const AlertModal = ({ isOpen, onClose, onConfirm, loading }: Props) => {
   return (
     <Modal
       title="Are you sure"
-      description="You are about to delete this store. This action cannot be undone."
+      description="You are about to delete the current item. This action cannot be undone."
       isOpen={isOpen}
       onClose={onClose}
     >

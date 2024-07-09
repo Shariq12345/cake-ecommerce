@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { useParams, useRouter } from "next/navigation";
 import AlertModal from "@/components/alert-modal";
 import ApiAlert from "@/components/api-alert";
+import { useOrigin } from "@/hooks/use-origin";
 
 type Props = {
   initialData: Store;
@@ -39,6 +40,7 @@ const SettingsForm = ({ initialData }: Props) => {
   const [loading, setLoading] = useState(false);
   const params = useParams();
   const router = useRouter();
+  const origin = useOrigin();
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(formSchema),
@@ -86,10 +88,10 @@ const SettingsForm = ({ initialData }: Props) => {
         <Button
           disabled={loading}
           variant="destructive"
-          size="icon"
           onClick={() => setOpen(true)}
         >
-          <Trash className="size-4" />
+          <Trash className="mr-2 size-4" />
+          Delete Store
         </Button>
       </div>
       <Separator />
