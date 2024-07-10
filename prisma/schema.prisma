@@ -9,23 +9,24 @@ datasource db {
 }
 
 model Store {
-  id         String    @id @default(uuid())
+  id         String      @id @default(uuid())
   name       String
   userId     String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
   billboards Billboard[] @relation("StoreToBillboard")
-  categories Category[] @relation("StoreToCategory")
+  categories Category[]  @relation("StoreToCategory")
+  weight     Weight[]    @relation("StoreToWeight")
 }
 
 model Billboard {
-  id         String     @id @default(uuid())
+  id         String      @id @default(uuid())
   storeId    String 
   label      String 
   imageUrl   String
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  store      Store      @relation("StoreToBillboard", fields: [storeId], references: [id])
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  store      Store       @relation("StoreToBillboard", fields: [storeId], references: [id])
   categories Category[] 
   @@index([storeId])
 }
@@ -37,9 +38,21 @@ model Category {
   updatedAt   DateTime   @updatedAt
   storeId     String
   billboardId String
-  store     Store     @relation("StoreToCategory", fields: [storeId], references: [id])
-  billboard  Billboard @relation(fields: [billboardId], references: [id])
+  store     Store        @relation("StoreToCategory", fields: [storeId], references: [id])
+  billboard  Billboard   @relation(fields: [billboardId], references: [id])
 
   @@index([storeId])
   @@index([billboardId])
+}
+
+model Weight {
+  id        String      @id @default(uuid())
+  storeId   String
+  name      String
+  value     String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  store     Store       @relation("StoreToWeight",fields: [storeId], references: [id])
+
+  @@index([storeId])
 }
