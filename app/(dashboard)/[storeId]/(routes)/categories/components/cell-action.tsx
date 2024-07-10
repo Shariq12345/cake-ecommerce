@@ -11,13 +11,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { BillboardColumn } from "./columns";
+import { CategoryColumn } from "./columns";
 import { Button } from "@/components/ui/button";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import AlertModal from "@/components/alert-modal";
 
 type CellActionProps = {
-  data: BillboardColumn;
+  data: CategoryColumn;
 };
 
 export const CellAction = ({ data }: CellActionProps) => {
@@ -27,17 +27,17 @@ export const CellAction = ({ data }: CellActionProps) => {
   const [open, setOpen] = useState(false);
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id);
-    toast.success("Billboard Copied");
+    toast.success("Category Copied");
   };
 
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/billboards/${data.id}`);
-      toast.success("Billboard deleted.");
+      await axios.delete(`/api/${params.storeId}/categories/${data.id}`);
+      toast.success("Category deleted.");
       router.refresh();
     } catch (error) {
-      toast.error("Make sure to remove all categories using this billboard.");
+      toast.error("Make sure to remove all products from this category first.");
     } finally {
       setLoading(false);
       setOpen(false);
@@ -64,7 +64,7 @@ export const CellAction = ({ data }: CellActionProps) => {
           <DropdownMenuItem
             className="cursor"
             onClick={() =>
-              router.push(`/${params.storeId}/billboards/${data.id}`)
+              router.push(`/${params.storeId}/categories/${data.id}`)
             }
           >
             <Edit className="mr-2 size-4" />
