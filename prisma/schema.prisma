@@ -17,6 +17,8 @@ model Store {
   billboards Billboard[] @relation("StoreToBillboard")
   categories Category[]  @relation("StoreToCategory")
   weight     Weight[]    @relation("StoreToWeight")
+  flavor     Flavor[]   @relation("StoreToFlavor")
+  products   Product[]   @relation("StoreToProduct")
 }
 
 model Billboard {
@@ -38,8 +40,10 @@ model Category {
   updatedAt   DateTime   @updatedAt
   storeId     String
   billboardId String
-  store     Store        @relation("StoreToCategory", fields: [storeId], references: [id])
-  billboard  Billboard   @relation(fields: [billboardId], references: [id])
+  store       Store      @relation("StoreToCategory", fields: [storeId], references: [id])
+  billboard   Billboard  @relation(fields: [billboardId], references: [id])
+  products    Product[]  @relation("CategoryToProduct")
+
 
   @@index([storeId])
   @@index([billboardId])
@@ -53,6 +57,55 @@ model Weight {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   store     Store       @relation("StoreToWeight",fields: [storeId], references: [id])
+  products  Product[]
+  @@index([storeId])
+}
+
+model Flavor {
+  id        String      @id @default(uuid())
+  storeId   String
+  name      String
+  value     String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  store     Store       @relation("StoreToFlavor",fields: [storeId], references: [id])
+  products  Product[]
+  @@index([storeId])
+}
+
+
+model Product {
+  id          String     @id @default(uuid())
+  storeId     String
+  name        String
+  price       Decimal
+  isFeatured  Boolean    @default(false)
+  isArchived  Boolean    @default(false)
+  categoryId  String
+  weightId    String
+  flavorId    String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  weight      Weight     @relation(fields: [weightId], references: [id])
+  flavor      Flavor      @relation(fields: [flavorId], references: [id])
+  store       Store      @relation("StoreToProduct", fields: [storeId], references: [id])
+  category    Category   @relation("CategoryToProduct", fields: [categoryId], references:[id])
+  images      Image[]
 
   @@index([storeId])
+  @@index([categoryId])
+  @@index([weightId])
+  @@index([flavorId])
+}
+
+
+model Image {
+  id        String     @id @default(uuid())
+  url       String
+  productId String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  product   Product    @relation(fields: [productId], references: [id], onDelete:Cascade)
+
+  @@index([productId])
 }

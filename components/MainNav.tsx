@@ -23,14 +23,24 @@ const MainNav = ({
       active: pathname === `/${params.storeId}/billboards`,
     },
     {
-      href: `/${params.storeId}/weights`,
-      label: `Weights`,
-      active: pathname === `/${params.storeId}/weights`,
+      href: `/${params.storeId}/products`,
+      label: `Products`,
+      active: pathname === `/${params.storeId}/products`,
     },
     {
       href: `/${params.storeId}/categories`,
       label: `Categories`,
       active: pathname === `/${params.storeId}/categories`,
+    },
+    {
+      href: `/${params.storeId}/weights`,
+      label: `Weights`,
+      active: pathname === `/${params.storeId}/weights`,
+    },
+    {
+      href: `/${params.storeId}/flavors`,
+      label: `Flavors`,
+      active: pathname === `/${params.storeId}/flavors`,
     },
     {
       href: `/${params.storeId}/settings`,

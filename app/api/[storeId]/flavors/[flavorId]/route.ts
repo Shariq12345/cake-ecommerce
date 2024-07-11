@@ -5,29 +5,29 @@ import db from "@/lib/db";
 export async function GET(
   // REQUEST IS NOT REQUIRED BUT WE CANNOT ONLY USE THE PARAMS
   req: Request,
-  { params }: { params: { weightId: string } }
+  { params }: { params: { flavorId: string } }
 ) {
   try {
-    if (!params.weightId) {
-      return new NextResponse("Weight ID is required", { status: 400 });
+    if (!params.flavorId) {
+      return new NextResponse("Flavor ID is required", { status: 400 });
     }
 
-    const weight = await db.weight.findUnique({
+    const flavor = await db.flavor.findUnique({
       where: {
-        id: params.weightId,
+        id: params.flavorId,
       },
     });
 
-    return NextResponse.json(weight);
+    return NextResponse.json(flavor);
   } catch (error) {
-    console.log("[WEIGHT_GET]", error);
+    console.log("[FLAVOR_GET]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { storeId: string; weightId: string } }
+  { params }: { params: { storeId: string; flavorId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -47,8 +47,8 @@ export async function PATCH(
       return new NextResponse("Value is required", { status: 400 });
     }
 
-    if (!params.weightId) {
-      return new NextResponse("Weight Id is required", { status: 400 });
+    if (!params.flavorId) {
+      return new NextResponse("Flavor Id is required", { status: 400 });
     }
 
     // IF USER IS ACCESSING SOMEONELSE BILLBOARD
@@ -63,9 +63,9 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const weight = await db.weight.updateMany({
+    const flavor = await db.flavor.updateMany({
       where: {
-        id: params.weightId,
+        id: params.flavorId,
       },
       data: {
         name,
@@ -73,9 +73,9 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json(weight);
+    return NextResponse.json(flavor);
   } catch (error) {
-    console.log("[WEIGHT_PATCH]", error);
+    console.log("[FLAVOR_PATCH]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
@@ -83,7 +83,7 @@ export async function PATCH(
 export async function DELETE(
   // REQUEST IS NOT BUT WE CANNOT ONLY USE THE PARAMS
   req: Request,
-  { params }: { params: { storeId: string; weightId: string } }
+  { params }: { params: { storeId: string; flavorId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -92,8 +92,8 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!params.weightId) {
-      return new NextResponse("Weight ID is required", { status: 400 });
+    if (!params.flavorId) {
+      return new NextResponse("Flavor ID is required", { status: 400 });
     }
 
     // IF USER IS ACCESSING SOMEONELSE BILLBOARD
@@ -108,15 +108,15 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const weight = await db.weight.deleteMany({
+    const flavor = await db.flavor.deleteMany({
       where: {
-        id: params.weightId,
+        id: params.flavorId,
       },
     });
 
-    return NextResponse.json(weight);
+    return NextResponse.json(flavor);
   } catch (error) {
-    console.log("[WEIGHT_DELETE]", error);
+    console.log("[FLAVOR_DELETE]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
