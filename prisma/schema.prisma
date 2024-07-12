@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgres"
-  url      = env("DATABASE_URL")
+  provider     = "postgres"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
@@ -16,81 +16,82 @@ model Store {
   updatedAt  DateTime    @updatedAt
   billboards Billboard[] @relation("StoreToBillboard")
   categories Category[]  @relation("StoreToCategory")
-  weight     Weight[]    @relation("StoreToWeight")
-  flavor     Flavor[]   @relation("StoreToFlavor")
   products   Product[]   @relation("StoreToProduct")
+  weight     Weight[]    @relation("StoreToWeight")
+  flavor     Flavor[]    @relation("StoreToFlavor")
 }
 
 model Billboard {
-  id         String      @id @default(uuid())
-  storeId    String 
-  label      String 
+  id         String     @id @default(uuid())
+  storeId    String
+  label      String
   imageUrl   String
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  store      Store       @relation("StoreToBillboard", fields: [storeId], references: [id])
-  categories Category[] 
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  store      Store      @relation("StoreToBillboard", fields: [storeId], references: [id])
+  categories Category[]
+
   @@index([storeId])
 }
 
 model Category {
-  id          String     @id @default(uuid())
+  id          String    @id @default(uuid())
   name        String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   storeId     String
   billboardId String
-  store       Store      @relation("StoreToCategory", fields: [storeId], references: [id])
-  billboard   Billboard  @relation(fields: [billboardId], references: [id])
-  products    Product[]  @relation("CategoryToProduct")
-
+  billboard   Billboard @relation(fields: [billboardId], references: [id])
+  store       Store     @relation("StoreToCategory", fields: [storeId], references: [id])
+  products    Product[] @relation("CategoryToProduct")
 
   @@index([storeId])
   @@index([billboardId])
 }
 
 model Weight {
-  id        String      @id @default(uuid())
+  id        String    @id @default(uuid())
   storeId   String
   name      String
   value     String
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  store     Store       @relation("StoreToWeight",fields: [storeId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  store     Store     @relation("StoreToWeight", fields: [storeId], references: [id])
   products  Product[]
+
   @@index([storeId])
 }
 
 model Flavor {
-  id        String      @id @default(uuid())
+  id        String    @id @default(uuid())
   storeId   String
   name      String
   value     String
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  store     Store       @relation("StoreToFlavor",fields: [storeId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  store     Store     @relation("StoreToFlavor", fields: [storeId], references: [id])
   products  Product[]
+
   @@index([storeId])
 }
 
-
 model Product {
-  id          String     @id @default(uuid())
-  storeId     String
-  name        String
-  price       Decimal
-  isFeatured  Boolean    @default(false)
-  isArchived  Boolean    @default(false)
-  categoryId  String
-  weightId    String
-  flavorId    String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  weight      Weight     @relation(fields: [weightId], references: [id])
-  flavor      Flavor      @relation(fields: [flavorId], references: [id])
-  store       Store      @relation("StoreToProduct", fields: [storeId], references: [id])
-  category    Category   @relation("CategoryToProduct", fields: [categoryId], references:[id])
-  images      Image[]
+  id         String   @id @default(uuid())
+  name       String
+  price      Decimal
+  isFeatured Boolean  @default(false)
+  isArchived Boolean  @default(false)
+  storeId    String
+  categoryId String
+  weightId   String
+  flavorId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  store      Store    @relation("StoreToProduct", fields: [storeId], references: [id])
+  category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  weight     Weight   @relation(fields: [weightId], references: [id])
+  flavor     Flavor   @relation(fields: [flavorId], references: [id])
+  images     Image[]
 
   @@index([storeId])
   @@index([categoryId])
@@ -98,14 +99,13 @@ model Product {
   @@index([flavorId])
 }
 
-
 model Image {
-  id        String     @id @default(uuid())
+  id        String   @id @default(uuid())
   url       String
   productId String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  product   Product    @relation(fields: [productId], references: [id], onDelete:Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@index([productId])
 }
