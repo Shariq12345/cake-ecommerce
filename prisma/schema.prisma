@@ -19,6 +19,7 @@ model Store {
   products   Product[]   @relation("StoreToProduct")
   weight     Weight[]    @relation("StoreToWeight")
   flavor     Flavor[]    @relation("StoreToFlavor")
+  orders     Order[]     @relation("StoreToOrder")
 }
 
 model Billboard {
@@ -76,22 +77,23 @@ model Flavor {
 }
 
 model Product {
-  id         String   @id @default(uuid())
+  id         String      @id @default(uuid())
   name       String
   price      Decimal
-  isFeatured Boolean  @default(false)
-  isArchived Boolean  @default(false)
+  isFeatured Boolean     @default(false)
+  isArchived Boolean     @default(false)
   storeId    String
   categoryId String
   weightId   String
   flavorId   String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  store      Store    @relation("StoreToProduct", fields: [storeId], references: [id])
-  category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  weight     Weight   @relation(fields: [weightId], references: [id])
-  flavor     Flavor   @relation(fields: [flavorId], references: [id])
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  store      Store       @relation("StoreToProduct", fields: [storeId], references: [id])
+  category   Category    @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  weight     Weight      @relation(fields: [weightId], references: [id])
+  flavor     Flavor      @relation(fields: [flavorId], references: [id])
   images     Image[]
+  orderItems OrderItem[]
 
   @@index([storeId])
   @@index([categoryId])
@@ -107,5 +109,31 @@ model Image {
   updatedAt DateTime @updatedAt
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
+  @@index([productId])
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  storeId    String
+  isPaid     Boolean     @default(false)
+  phone      String      @default("")
+  address    String      @default("")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  orderItems OrderItem[]
+  // storeId field in the order model corresponds to the id field in the Store mode.
+  store      Store       @relation("StoreToOrder", fields: [storeId], references: [id])
+
+  @@index([storeId])
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id])
+
+  @@index([orderId])
   @@index([productId])
 }
