@@ -5,10 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { DataTable } from "@/components/data-table";
 import { columns, OrderColumn } from "./columns";
 import Heading from "@/components/Heading";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { PlusIcon } from "lucide-react";
-import ApiList from "@/components/api-list";
 
 type Props = {
   data: OrderColumn[];
